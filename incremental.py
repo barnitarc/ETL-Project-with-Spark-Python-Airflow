@@ -2,6 +2,7 @@ import pandas as pd
 import random
 from faker import Faker
 import os
+fake=Faker()
 def generate_incremental_data(initial_data_path, num_orders=10, new_customer_prob=0.2, update_customer_prob=0.3):
     initial_data = pd.read_csv(initial_data_path)
     existing_customers = initial_data[["customer_id", "customer_name", "city", "state", "email"]].drop_duplicates().to_dict("records")
@@ -28,6 +29,7 @@ def generate_incremental_data(initial_data_path, num_orders=10, new_customer_pro
             if random.random() < update_customer_prob:
                 customer["city"] = fake.city()
                 customer["state"] = fake.state()
+                customer["email"]= fake.email()
 
         orders.append({
             "transaction_id": f"T{len(initial_data) + i + 1:04}",
@@ -44,5 +46,6 @@ def generate_incremental_data(initial_data_path, num_orders=10, new_customer_pro
         })
 
     return pd.DataFrame(orders)
-df=generate_incremental_data("initial_load.csv")
-df.to_csv("",index=False)
+df=generate_incremental_data("/home/barnita/work/airflow-projects/dags/project-3/initial-data/initial_load_history.csv")
+df.to_csv("/home/barnita/work/airflow-projects/dags/project-3/incremental-data/incremental_load.csv",index=False, header=True)
+df.to_csv("/home/barnita/work/airflow-projects/dags/project-3/initial-data/initial_load_history.csv",index=False,mode='w',header=True)

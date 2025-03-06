@@ -1,6 +1,7 @@
 import pandas as pd
 import random
 from faker import Faker
+fake=Faker()
 def generate_initial_data(num_customers=15, num_orders=50):
     customers = [{"customer_id": i + 1, 
                   "customer_name": fake.name(), 
@@ -28,4 +29,5 @@ def generate_initial_data(num_customers=15, num_orders=50):
     return pd.DataFrame(orders)
 
 df=generate_initial_data()
-df.to_csv("",index=False)
+df.to_csv("/home/barnita/work/airflow-projects/dags/project-3/initial-data/initial_load.csv",index=False,mode='w',header=True)
+df.to_csv("/home/barnita/work/airflow-projects/dags/project-3/initial-data/initial_load_history.csv",index=False,mode='w',header=True)
